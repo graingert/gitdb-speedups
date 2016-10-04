@@ -1,19 +1,11 @@
-from distutils.core import setup, Extension
-from distutils.command.build_py import build_py
-from distutils.command.build_ext import build_ext
-
 import os
-import sys
+
+from setuptools import setup, Extension
+from distutils.command.build_py import build_py as du_build_py
 
 # wow, this is a mixed bag ... I am pretty upset about all of this ...
-setuptools_build_py_module = None
-try:
-    # don't pull it in if we don't have to
-    if 'setuptools' in sys.modules:
-        import setuptools.command.build_py as setuptools_build_py_module
-        from setuptools.command.build_ext import build_ext
-except ImportError:
-    pass
+from setuptools.command.build_py import build_py
+from setuptools.command.build_ext import build_ext
 
 
 class build_ext_nofail(build_ext):
@@ -65,9 +57,8 @@ def get_data_files(self):
         data.append((package, src_dir, build_dir, filenames))
     return data
 
-build_py.get_data_files = get_data_files
-if setuptools_build_py_module:
-    setuptools_build_py_module.build_py._get_data_files = get_data_files
+du_build_py.get_data_files = get_data_files
+build_py._get_data_files = get_data_files
 # END apply setuptools patch too
 
 __author__ = "Sebastian Thiel"
@@ -85,17 +76,16 @@ setup(
     author=__author__,
     author_email=__contact__,
     url=__homepage__,
-    packages=(pkg),
+    packages=[pkg],
     package_dir = {pkg: pkg},
     ext_modules=[Extension(
       pkg + '._perf',
       [pkg + '/_fun.c', pkg + '/_delta_apply.c'],
-      include_dirs=['gitdb'],
+      include_dirs=[pkg],
     )],
     license = "BSD License",
     zip_safe=False,
-    requires=('smmap (>=0.8.5)', ),
-    install_requires=('smmap >= 0.8.5'),
+    install_requires=['smmap >= 0.8.5'],
     long_description = """gitdb-speedups are a pure-c git object database speedups""",
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
