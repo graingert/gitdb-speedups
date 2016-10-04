@@ -1,3 +1,3 @@
 [submodule "smmap"]
-	path = gitdb/ext/smmap
+	path = gitdb_speedups/ext/smmap
 	url = https://github.com/Byron/smmap.git

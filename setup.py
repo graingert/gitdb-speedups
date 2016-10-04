@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from distutils.core import setup, Extension
 from distutils.command.build_py import build_py
 from distutils.command.build_ext import build_ext
@@ -71,55 +70,51 @@ if setuptools_build_py_module:
     setuptools_build_py_module.build_py._get_data_files = get_data_files
 # END apply setuptools patch too
 
-# NOTE: This is currently duplicated from the gitdb.__init__ module, as we cannot
-# satisfy the dependencies at installation time, unfortunately, due to inherent limitations
-# of distutils, which cannot install the prerequesites of a package before the acutal package.
 __author__ = "Sebastian Thiel"
 __contact__ = "byronimo@gmail.com"
-__homepage__ = "https://github.com/gitpython-developers/gitdb"
-version_info = (0, 6, 4)
-__version__ = '.'.join(str(i) for i in version_info)
+__homepage__ = "https://github.com/gitpython-developers/gitdb-speedups"
+__version__ = '0.1.0'
 
-setup(cmdclass={'build_ext': build_ext_nofail},
-      name="gitdb",
-      version=__version__,
-      description="Git Object Database",
-      author=__author__,
-      author_email=__contact__,
-      url=__homepage__,
-      packages=('gitdb', 'gitdb.db', 'gitdb.utils', 'gitdb.test'),
-      package_dir = {'gitdb': 'gitdb'},
-      ext_modules=[Extension('gitdb._perf', ['gitdb/_fun.c', 'gitdb/_delta_apply.c'], include_dirs=['gitdb'])],
-      license = "BSD License",
-      zip_safe=False,
-      requires=('smmap (>=0.8.5)', ),
-      install_requires=('smmap >= 0.8.5'),
-      long_description = """GitDB is a pure-Python git object database""",
-      # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-      classifiers=[
-          # Picked from
-    #    http://pypi.python.org/pypi?:action=list_classifiers
-    #"Development Status :: 1 - Planning",
-    #"Development Status :: 2 - Pre-Alpha",
-    #"Development Status :: 3 - Alpha",
-    # "Development Status :: 4 - Beta",
-    "Development Status :: 5 - Production/Stable",
-    #"Development Status :: 6 - Mature",
-    #"Development Status :: 7 - Inactive",
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: OS Independent",
-    "Operating System :: POSIX",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: MacOS :: MacOS X",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.6",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.2",
-    "Programming Language :: Python :: 3.3",
-    "Programming Language :: Python :: 3.4",
-    "Programming Language :: Python :: 3.5",
-],)
+pkg = 'gitdb_speedups'
+
+setup(
+    cmdclass={'build_ext': build_ext_nofail},
+    name="gitdb-speedups",
+    version=__version__,
+    description="Git Object Database: C speedups",
+    author=__author__,
+    author_email=__contact__,
+    url=__homepage__,
+    packages=(pkg),
+    package_dir = {pkg: pkg},
+    ext_modules=[Extension(
+      pkg + '._perf',
+      [pkg + '/_fun.c', pkg + '/_delta_apply.c'],
+      include_dirs=['gitdb'],
+    )],
+    license = "BSD License",
+    zip_safe=False,
+    requires=('smmap (>=0.8.5)', ),
+    install_requires=('smmap >= 0.8.5'),
+    long_description = """gitdb-speedups are a pure-c git object database speedups""",
+    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Plugins",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+        "Operating System :: POSIX",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: MacOS :: MacOS X",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.2",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+    ],
+)
